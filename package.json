@@ -1,5 +1,5 @@
 {
-  "name": "react-field-formatter",
+  "name": "format-as-you-type",
   "author": "Mark Kopani <mkopani@icloud.com>",
   "description": "The simplest field formatting and masking tool for React.",
   "keywords": ["react", "formatter", "formatting", "masking", "simple", "hook"],
@@ -10,7 +10,7 @@
   "files": ["dist", "README.md", "third-party-licenses.txt"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mkopani/react-field-formatter.git"
+    "url": "git+https://github.com/mkopani/format-as-you-type.git"
   },
   "scripts": {
     "start": "react-scripts start",
