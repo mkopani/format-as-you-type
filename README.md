@@ -2,7 +2,7 @@
 
 #### The simplest field formatting and masking tool for React.
 
-Format input fields the way you want using the components you already use. Real-time. No hassle.
+Format fields the way you want using the input components you already use. Real-time. No hassle.
 
 ## Overview
 
