@@ -2,8 +2,12 @@
   "name": "react-field-formatter",
   "author": "Mark Kopani <mkopani@icloud.com>",
   "description": "The simplest field formatting and masking tool for React.",
+  "keywords": ["react", "formatter", "formatting", "masking", "simple", "hook"],
   "version": "1.0.0",
-  "private": true,
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": ["dist", "README.md", "third-party-licenses.txt"],
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@testing-library/jest-dom": "^5.16.1",
