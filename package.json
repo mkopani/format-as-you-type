@@ -8,24 +8,14 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": ["dist", "README.md", "third-party-licenses.txt"],
-  "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
-    "@types/node": "^17.0.10",
-    "@types/react": "^17.0.38",
-    "@types/react-dom": "^17.0.11",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkopani/react-field-formatter.git"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "rm -rf dist && NODE_ENV=production babel src/package --out-dir dist --copy-files",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
@@ -45,9 +35,22 @@
       "last 1 safari version"
     ]
   },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.12",
-    "@babel/preset-env": "^7.16.11"
+    "@babel/preset-env": "^7.16.11",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-scripts": "5.0.0"
   }
 }

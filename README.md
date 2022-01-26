@@ -7,7 +7,7 @@ Format input fields the way you want. Real-time. No hassle.
 ## Overview
 
 * Install by running `npm i react-field-formatter` or `yarn add react-field-formatter`.
-* Import to a React component using `import useFieldFormatter from 'react-field-formatter/useFieldFormatter'`.
+* Import to a React component using `import useFieldFormatter from 'react-field-formatter'`.
 * Define a hook instance by passing in a formatter (see below) and a callback function to run `onChange`. E.g.,
 ```
 const birthdayFormatter = useFieldFormatter(formatDate, setBirthday);
@@ -33,7 +33,7 @@ See the __API__ header further below to learn more about each function's options
 Generic formatters not getting the job done? Make your own! Just import `formatString`. Here's an example:
 
 ```
-import formatString from 'react-field-formatter/formatString';
+import { formatString } from 'react-field-formatter';
 
 const formatCustom = (newInput, options, /* any additional parameters */) => {
   // Any extra logic goes here...
@@ -52,8 +52,7 @@ Here's an example of how to implement `useFieldFormatter` in your component.
 
 ```
 import React from 'react';
-import useFieldFormatter from 'react-field-formatter/useFieldFormatter';
-import formatDate from 'react-field-formatter/formatDate';
+import useFieldFormatter, { formatDate } from 'react-field-formatter';
 
 const YourFormComponent = (props) => {
   const [birthday, setBirthday] = React.useState('');
