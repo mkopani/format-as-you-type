@@ -4,8 +4,8 @@ import formatDate from "./formatDate";
 import formatPhone from "./formatPhone";
 import formatPostalCodeCanada from "./formatPostalCodeCanada";
 import formatString from "./formatString";
-import useFieldFormatter from "./useFieldFormatter";
 
+export { default } from "./useFieldFormatter";
 export {
   formatBigNumber,
   formatCreditCard,
@@ -13,5 +13,4 @@ export {
   formatPhone,
   formatPostalCodeCanada,
   formatString,
-  useFieldFormatter,
 };
