@@ -137,7 +137,7 @@ const YourFormComponent = (props) => {
 | Parameter | Description |
 | --------- | ----------- |
 | formatter | A generic or custom formatter function (see below) that takes in (1) a string and (2) an options object, in that order. |
-| onChange | A callback function to update your field's value after if has been formatted. (`(formattedValue) => onChange(formattedValue)`) |
+| onChange | A callback function to update your field's value after if has been formatted. (This should have the structure `(newValue) => setValueSomewhere(newValue)`) |
 | refProp | The prop to use to pass our internal prop to your input component. Is `'ref'` by default for plain HTML fields, but can be replaced with `inputRef`, `innerRef`, or whichever prop is instructed by your specific component/library. |
 
 ### formatDate
