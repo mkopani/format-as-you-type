@@ -1,9 +1,9 @@
 import React from "react";
 import findIndexAfterMovement from "./_lib/findIndexAfterMovement";
 
-const useFieldFormatter = (formatter, onChange) => {
+const useFieldFormatter = (formatter, onChange, refProp = 'ref') => {
   const [position, setPosition] = React.useState(null);
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef();
   
   if (typeof onChange !== 'function') {
     throw new TypeError(
@@ -12,8 +12,10 @@ const useFieldFormatter = (formatter, onChange) => {
   }
 
   React.useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.setSelectionRange(position, position);
+    const input = inputRef.current;
+
+    if (input) {
+      input?.setSelectionRange(position, position);
     }
   }, [inputRef, position]);
 
@@ -60,7 +62,7 @@ const useFieldFormatter = (formatter, onChange) => {
     }
   };
 
-  return { onChange: handleChange, ref: inputRef };
+  return { onChange: handleChange, [refProp]: inputRef };
 };
 
 export default useFieldFormatter;

@@ -8,11 +8,15 @@ Format fields the way you want using the input components you already use. Real-
 
 * Install by running `npm i format-as-you-type` or `yarn add format-as-you-type`.
 * Import to a React component using `import useFieldFormatter from 'format-as-you-type'`.
-* Define a hook instance by passing in a formatter (see below) and a callback function to run `onChange`. E.g.,
-```
-const birthdayFormatter = useFieldFormatter(formatDate, setBirthday);
-```
-* The hook instance contains props to pass to your input component. Implement them by simply adding `{ ...birthdayFormatter }` at the end of the component's props.
+* Define a hook instance by passing in:
+  1. A formatter (see below),
+  2. A callback function that executes `onChange` (E.g., `const birthdayFormatter = useFieldFormatter(formatDate, setBirthday);`), and
+  3. (Optionally) a custom ref prop to use on your field instead of the default `ref={}`.†
+* The hook instance contains props to pass to your input component. Implement them by simply adding `{ ...yourConstantName }` at the end of the component's props.
+
+Want to see more examples? Keep reading!
+
+† As you will see further below, there are some custom input components that won't behave as expected when using `ref={}`.
 
 ## Generic Formatters
 
@@ -46,9 +50,9 @@ Custom formats can either contain placeholder characters such as `A` for letters
 
 \***** The only rule is that __the first parameter must be the string being formatted__ and __the second parameter must accept an options argument__. \*****
 
-## Implementing a Formatter in a Component
+## Implementing a Formatter in a Plain HTML Field
 
-Here's an example of how to implement `useFieldFormatter` in your component.
+Implementing `useFieldFormatter` in a plan HTML field is easy:
 
 ```
 import React from 'react';
@@ -76,9 +80,65 @@ const YourFormComponent = (props) => {
 };
 ```
 
+## Implementing a Formatter in a Custom Component
+
+When using `useFieldFormatter` on a custom text field component, you may encounter warnings, errors, or other unpredictable behaviour. That's because, in the context of our example, spreading `birthdayFormatter` in a component yields the following by default:
+
+```
+<InputComponent
+  /* other props */
+  onChange={(event) => ourChangeHandler(event)}
+  ref={ourInternalInputRef}
+/>
+```
+
+Some custom input components don't work without using a different prop instead, such as `innerRef`, `inputRef`, etc., or wrapping the component in a `React.forwardRef`.
+
+Since we can't (yet) predict what type of component the hook will be spread into, the simplest solution, at the moment, is to provide the ref prop as the third argument when initializing `useFieldFormatter`.
+
+In Material-UI's case, this is `inputRef`. If you use another library and run into problems, give their documentation a read. For our example, though, we'll stick to Material-UI:
+
+```
+import React from 'react';
+import useFieldFormatter, { formatDate } from 'format-as-you-type';
+import TextField from '@mui/material/TextField';
+
+const YourFormComponent = (props) => {
+  const [birthday, setBirthday] = React.useState('');
+
+  const birthdayFormatter = useFieldFormatter(formatDate, setBirthday, 'inputRef');
+
+  return (
+    <form>
+      /* ... */
+
+      <TextField
+        label="Birthday"
+        value={birthday}
+        { ...birthdayFormatter }
+      />
+
+      /* ... */
+    </form>
+  );
+};
+```
+
 <!-- If you want to see live code in action, just take a look at the demo. -->
 
 ## API
+
+### useFieldFormatter
+
+`useFieldFormatter(formatter, onChange, refProp = 'ref')`
+
+##### Parameters
+
+| Parameter | Description |
+| --------- | ----------- |
+| formatter | A generic or custom formatter function (see below) that takes in (1) a string and (2) an options object, in that order. |
+| onChange | A callback function to update your field's value after if has been formatted. (`(formattedValue) => onChange(formattedValue)`) |
+| refProp | The prop to use to pass our internal prop to your input component. Is `'ref'` by default for plain HTML fields, but can be replaced with `inputRef`, `innerRef`, or whichever prop is instructed by your specific component/library. |
 
 ### formatDate
 
