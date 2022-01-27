@@ -9,6 +9,7 @@ const formatString = (newInput, format = '', options = {}) => {
   setDefaultOption(options, 'lettersAsSeparators', false);
   setDefaultOption(options, 'numbersOnly', false);
   setDefaultOption(options, 'lettersOnly', false);
+  setDefaultOption(options, 'allCaps', false);
 
   // Check for conflicting parameters
   checkParameters(options);
@@ -20,6 +21,7 @@ const formatString = (newInput, format = '', options = {}) => {
     customFormatter,
     numbersOnly,
     lettersOnly,
+    allCaps,
   } = options;
 
   // Handle backspace/delete if necessary
@@ -31,6 +33,7 @@ const formatString = (newInput, format = '', options = {}) => {
 
   if (numbersOnly) newInput = removeLetters(newInput);
   if (lettersOnly) newInput = removeNumbers(newInput);
+  if (allCaps) newInput = newInput.toUpperCase();
 
   // Clean up input and re-start process
   let rawValue = removeSeparators(newInput, lettersAsSeparators);
@@ -84,6 +87,10 @@ export default formatString;
 const checkParameters = (options) => {
   if (options.numbersOnly && options.lettersOnly) {
     throw new Error('One of numbersOnly or lettersOnly must be false.');
+  }
+
+  if (options.numbersOnly && options.allCaps) {
+    console.log("Heads up: allCaps doesn't do anything if numbersOnly is true.");
   }
 
   if (options.lettersOnly && options.lettersAsSeparators) {

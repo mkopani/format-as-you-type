@@ -1,8 +1,12 @@
 # Change Log
 
+## [1.0.4] - 2022-01-27
+
+Added `capsLock` option to `formatString` and applied option to `formatPostalCodeCanada`.
+
 ## [1.0.3] - 2022-01-26
 
-Minor tweaks to wording in README
+Minor tweaks to wording in README.
 
 ## [1.0.2] - 2022-01-26
 

@@ -27,3 +27,4 @@ yarn-debug.log*
 yarn-error.log*
 
 */test.js
+demo/node_modules/
