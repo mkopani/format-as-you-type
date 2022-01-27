@@ -2,12 +2,24 @@
   "name": "format-as-you-type",
   "author": "Mark Kopani <mkopani@icloud.com>",
   "description": "The simplest field formatting and masking tool for React.",
-  "keywords": ["react", "formatter", "formatting", "masking", "simple", "hook"],
-  "version": "1.0.0",
+  "keywords": [
+    "react",
+    "formatter",
+    "formatting",
+    "masking",
+    "simple",
+    "hook"
+  ],
+  "version": "1.0.1",
+  "license": "MIT",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "files": ["dist", "README.md", "third-party-licenses.txt"],
+  "files": [
+    "dist",
+    "README.md",
+    "third-party-licenses.txt"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mkopani/format-as-you-type.git"
@@ -35,9 +47,6 @@
       "last 1 safari version"
     ]
   },
-  "dependencies": {
-    "@babel/polyfill": "^7.12.1"
-  },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
@@ -45,12 +54,14 @@
   "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.12",
+    "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-scripts": "5.0.0"
+    "@testing-library/user-event": "^13.5.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.16.7"
   }
 }

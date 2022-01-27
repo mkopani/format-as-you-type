@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import React from "react";
 import findIndexAfterMovement from "./_lib/findIndexAfterMovement";
 
 const useFieldFormatter = (formatter, onChange) => {
+  const [position, setPosition] = React.useState(null);
+  const inputRef = React.useRef(null);
+  
   if (typeof onChange !== 'function') {
     throw new TypeError(
       'Argument must be passed for onChange and must be a function that accepts a new value.'
     );
   }
 
-  const [position, setPosition] = useState(null);
-  const inputRef = useRef();
-
-  useEffect(() => {
-    const input = inputRef.current;
-    if (input) {
-      input.setSelectionRange(position, position);
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.setSelectionRange(position, position);
     }
   }, [inputRef, position]);
 
