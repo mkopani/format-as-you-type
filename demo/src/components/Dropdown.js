@@ -3,6 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { fieldMargin, fieldSize } from "../constants";
 
 const Dropdown = (props) => {
   const { choices, id, label, onChange, value, ...other } = props;
@@ -18,6 +19,8 @@ const Dropdown = (props) => {
         value={value}
         label={label}
         onChange={onChange}
+        margin={fieldMargin}
+        size={fieldSize}
       >
         {Object.entries(choices).map(([choiceValue, choiceLabel]) => (
           <MenuItem key={choiceValue} value={choiceValue}>

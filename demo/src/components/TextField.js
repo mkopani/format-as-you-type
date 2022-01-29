@@ -1,31 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { default as MuiTextField } from "@mui/material/TextField";
+import ClearFieldButton from "./ClearFieldButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+import { fieldMargin, fieldSize } from "../constants";
 
 const TextField = (props) => {
   const { value, label, onChange, onClear, ...other } = props;
 
   return (
     <MuiTextField
+      fullWidth
       label={label}
       value={value}
       onChange={onChange}
       variant="outlined"
+      margin={fieldMargin}
+      size={fieldSize}
       InputProps={{
         endAdornment: typeof onClear === 'function' && !!value.length ? (
           <InputAdornment>
-            <Tooltip title="Clear Text" enterDelay={200}>
-              <span>
-                <IconButton aria-label="clear" onClick={onClear}>
-                  &times;
-                </IconButton>
-              </span>
-            </Tooltip>
+            <ClearFieldButton onClick={onClear} disabled={value === ''} />
           </InputAdornment>
-        ) : <React.Fragment />
+        ) : (
+          <React.Fragment />
+        ),
+        sx: { fontWeight: 400 }
       }}
       { ...other }
     />

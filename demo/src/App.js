@@ -1,105 +1,126 @@
 import React, { useState } from "react";
-import * as fmt from "format-as-you-type";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
 import Dropdown from "./components/Dropdown";
 import FormCard from "./components/FormCard";
 import FormRow from "./components/FormRow";
 import Grid from "@mui/material/Grid";
 import TextField from "./components/TextField";
+import { fieldSize } from "./constants";
+import useFieldFormatter, {
+  formatString,
+  formatDate,
+  formatPhone,
+  formatCreditCard,
+  formatPostalCodeCanada,
+  formatBigNumber,
+} from "format-as-you-type";
 
-const App = (props) => {
+const App = () => {
   const [muiFieldValue, setMuiFieldValue] = useState('');
   const [htmlFieldValue, setHtmlFieldValue] = useState('');
 
-  const [muiFormatter, setMuiFormatter] = useState('date');
-  const [htmlFormatter, setHtmlFormatter] = useState('date');
+  const [formatter, setFormatter] = useState('date');
+  const [otherFormat, setOtherFormat] = useState('');
 
-  const [muiOtherFormat, setMuiOtherFormat] = useState('');
-  const [htmlOtherFormat, setHtmlOtherFormat] = useState('');
-
-  const muiCustomFormatter = (newInput, options) => {
-    return fmt.formatString(newInput, muiOtherFormat, options);
+  const customFormatter = (newInput, options, format = otherFormat) => {
+    return formatString(newInput, format, options);
   };
 
-  const htmlCustomFormatter = (newInput, options) => {
-    return fmt.formatString(newInput, htmlOtherFormat, options);
-  };
-
-  const formatMuiField = fmt.useFieldFormatter(
-    muiFormatter === 'other' ? muiCustomFormatter : formatters?.[muiFormatter],
+  const formatMuiField = useFieldFormatter(
+    formatter === 'other' ? customFormatter : formatters?.[formatter],
     setMuiFieldValue,
     'inputRef'
   );
 
-  const formatHtmlField = fmt.useFieldFormatter(
-    htmlFormatter === 'other' ? htmlCustomFormatter : formatters?.[htmlFormatter],
+  const formatHtmlField = useFieldFormatter(
+    formatter === 'other' ? customFormatter : formatters?.[formatter],
     setHtmlFieldValue
   );
 
+  const handleFormatChange = (event) => {
+    const newFormatKey = event.target.value;
+    setFormatter(newFormatKey);
+
+    const newFormatter = newFormatKey === 'other' ?
+      customFormatter :
+      formatters?.[newFormatKey];
+
+    setMuiFieldValue( newFormatter(muiFieldValue) );
+    setHtmlFieldValue( newFormatter(htmlFieldValue) );
+  };
+
+  const handleCustomFormatChange = (event) => {
+    const newFormat = event.target.value;
+    setOtherFormat(newFormat);
+
+    setMuiFieldValue( customFormatter(muiFieldValue, undefined, newFormat) );
+    setHtmlFieldValue( customFormatter(htmlFieldValue, undefined, newFormat) );
+  };
+
   return (
-    <Container>
-      <Grid container spacing={2}>
-        {/* MUI example */}
-        <FormCard>
-          <FormRow>
-            <Dropdown
-              id="mui-format"
-              value={muiFormatter}
-              label="Format"
-              onChange={event => setMuiFormatter(event.target.value)}
-              choices={formatterDropdownChoices}
-            />
-          </FormRow>
-          {muiFormatter === 'other' && (
-            <FormRow>
-              <TextField
-                value={muiOtherFormat}
-                onChange={event => setMuiOtherFormat(event.target.value)}
-                onClear={() => setMuiOtherFormat('')}
-              />
-            </FormRow>
-          )}
-          <FormRow>
-            <TextField
-              value={muiFieldValue}
-              label={inputFieldLabel}
-              onClear={() => setMuiFieldValue('')}
-              { ...formatMuiField }
-            />
-          </FormRow>
-        </FormCard>
-        
-        {/* HTMLInputElement example */}
-        <FormCard>
-          <FormRow>
-            <Dropdown
-              id="html-format"
-              value={htmlFormatter}
-              label="Format"
-              onChange={event => setHtmlFormatter(event.target.value)}
-              choices={formatterDropdownChoices}
-            />
-          </FormRow>
-          {htmlFormatter === 'other' && (
-            <FormRow>
-              <TextField
-                value={htmlOtherFormat}
-                onChange={event => setHtmlOtherFormat(event.target.value)}
-                onClear={() => setHtmlOtherFormat('')}
-              />
-            </FormRow>
-          )}
-          <FormRow>
-            <TextField
-              value={htmlFieldValue}
-              label={inputFieldLabel}
-              onClear={() => setHtmlFieldValue('')}
-              { ...formatHtmlField }
-            />
-          </FormRow>
-        </FormCard>
-      </Grid>
-    </Container>
+    <>
+      <CssBaseline />
+      <ThemeProvider theme={CustomTheme}>
+        <Container style={{ width: '100%' }}>
+          <Grid container spacing={2} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+            <FormCard>
+              <FormRow>
+                <Dropdown
+                  id="mui-format"
+                  value={formatter}
+                  label="Format"
+                  onChange={handleFormatChange}
+                  choices={formatterDropdownChoices}
+                />
+              </FormRow>
+              {formatter === 'other' && (
+                <FormRow>
+                  <TextField
+                    value={otherFormat}
+                    label="Custom Format"
+                    onChange={handleCustomFormatChange}
+                    onClear={() => setOtherFormat('')}
+                  />
+                </FormRow>
+              )}
+              <FormRow>
+                <Divider sx={{ mt: 1 }} />
+              </FormRow>
+              {/* MUI input field */}
+              <FormRow>
+                <TextField
+                  value={muiFieldValue}
+                  label="MUI Input"
+                  onClear={() => setMuiFieldValue('')}
+                  { ...formatMuiField }
+                />
+              </FormRow>
+              {/* HTMLInputElement */}
+              <FormRow>
+                <Grid container alignItems="center">
+                  <HTMLInputLabel
+                    htmlFor="html-input-field"
+                  >
+                    Native HTML Input:&nbsp;
+                  </HTMLInputLabel>
+                  <FormRow>
+                    <StyledHTMLInputField
+                      id="html-input-field"
+                      value={htmlFieldValue}
+                      sx={{ mt: 1, mr: 1 }}
+                      { ...formatHtmlField }
+                    />
+                  </FormRow>
+                </Grid>
+              </FormRow>
+            </FormCard>
+          </Grid>
+        </Container>
+      </ThemeProvider>
+    </>
   );
 };
 
@@ -108,20 +129,44 @@ export default App;
 // ********************************************************************
 // SUPPLEMENTARY
 const formatters = {
-  date: fmt.formatDate,
-  phone: fmt.formatPhone,
-  creditCard: fmt.formatCreditCard,
-  postalCode: fmt.formatPostalCodeCanada,
-  bigNumber: fmt.formatBigNumber,
+  date: formatDate,
+  phone: formatPhone,
+  creditCard: formatCreditCard,
+  postalCode: formatPostalCodeCanada,
+  bigNumber: formatBigNumber,
 };
 
 const formatterDropdownChoices = {
-  date: 'Date; YYYY-MM-DD',
-  phone: 'Phone; (000) 000-0000',
-  creditCard: 'Credit Card; 0000 0000 0000 0000',
-  postalCode: 'Postal Code; A0A 0A0',
-  bigNumber: 'Big Number; 0,000,000',
+  date: 'Date | YYYY-MM-DD',
+  phone: 'Phone | (000) 000-0000',
+  creditCard: 'Credit Card | 0000 0000 0000 0000',
+  postalCode: 'Postal Code | A0A 0A0',
+  bigNumber: 'Big Number | 0,000,000',
   other: 'Other',
 };
 
-const inputFieldLabel = 'Your Input';
+const StyledHTMLInputField = styled('input')({
+  marginRight: 2,
+  fontSize: '1rem',
+  fontWeight: 400,
+  lineHeight: fieldSize === 'small' ? '2.2rem' : '2.6rem',
+  borderRadius: 5,
+  borderStyle: 'solid',
+  borderWidth: '1.25px',
+  paddingLeft: '0.9rem',
+  paddingRight: '0.9rem',
+  width: '100%',
+});
+
+const HTMLInputLabel = styled('label')({
+  color: 'dimgrey',
+  fontSize: '0.95rem',
+});
+
+const CustomTheme = createTheme({
+  typography: {
+    fontFamily: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"Helvetica Neue"',
+      'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"',
+    ].join(','),
+  }
+});
