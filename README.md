@@ -13,6 +13,9 @@ Format fields the way you want using the input components you already use. Real-
   2. A callback function that executes `onChange` (E.g., `const birthdayFormatter = useFieldFormatter(formatDate, setBirthday);`), and
   3. (Optionally) a custom ref prop to use on your field instead of the default `ref={}`.†
 * The hook instance contains props to pass to your input component. Implement them by simply adding `{ ...yourConstantName }` at the end of the component's props.
+<!-- * [See for yourself!]() -->
+
+![demo-gif](demo/demo.gif)
 
 Want to see more examples? Keep reading!
 
@@ -123,8 +126,6 @@ const YourFormComponent = (props) => {
   );
 };
 ```
-
-<!-- If you want to see live code in action, just take a look at the demo. -->
 
 ## API
 

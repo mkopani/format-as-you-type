@@ -2,9 +2,9 @@
 
 ## [1.0.5] - 2022-01-29
 
-* Added `noLetters` option to `formatDate`.
 * Added demo app.
-* Added GIF to README. 
+* Added `numbersOnly: true` option to `formatDate`.
+* Added GIF to README.
 
 ## [1.0.4] - 2022-01-27
 
