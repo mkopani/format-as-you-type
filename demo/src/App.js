@@ -4,12 +4,14 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Dropdown from "./components/Dropdown";
+import Footer from "./components/Footer";
 import FormCard from "./components/FormCard";
+import FormLabel from "@mui/material/FormLabel";
 import FormRow from "./components/FormRow";
 import Grid from "@mui/material/Grid";
 import TextField from "./components/TextField";
 import Typography from "@mui/material/Typography";
-import { authorWebsite, fieldSize } from "./constants";
+import { fieldSize } from "./constants";
 import useFieldFormatter, {
   formatString,
   formatDate,
@@ -18,8 +20,6 @@ import useFieldFormatter, {
   formatPostalCodeCanada,
   formatBigNumber,
 } from "format-as-you-type";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 
 const App = () => {
   const [muiFieldValue, setMuiFieldValue] = useState('');
@@ -28,40 +28,56 @@ const App = () => {
   const [formatter, setFormatter] = useState('date');
   const [otherFormat, setOtherFormat] = useState('');
 
-  /* const [creditCardMode, setCreditCardMode] = useState('NUMBER');
+  const [creditCardMode, setCreditCardMode] = useState('NUMBER');
 
   const creditCardFormatter = (newValue, options) => {
-    return formatters.creditCard(newValue, options, creditCardMode);
-  }; */
+    return formatCreditCard(newValue, options, creditCardMode);
+  };
 
   const customFormatter = (newInput, options, format = otherFormat) => {
     return formatString(newInput, format, options);
   };
 
+  const getFormatterFunction = (formatType = formatter) => {
+    let formatterFunction;
+    switch (formatType) {
+      case 'other':
+        formatterFunction = customFormatter;
+        break;
+
+      case 'creditCard':
+        formatterFunction = creditCardFormatter;
+        break;
+
+      default:
+        formatterFunction = formatters?.[formatType];
+    }
+
+    return formatterFunction;
+  };
+
   const formatMuiField = useFieldFormatter(
-    formatter === 'other' ? customFormatter : formatters?.[formatter],
+    getFormatterFunction(),
     setMuiFieldValue,
     'inputRef'
   );
 
   const formatHtmlField = useFieldFormatter(
-    formatter === 'other' ? customFormatter : formatters?.[formatter],
+    getFormatterFunction(),
     setHtmlFieldValue
   );
 
   const handleFormatChange = (event) => {
-    const newFormatKey = event.target.value;
-    setFormatter(newFormatKey);
+    const newFormatterType = event.target.value;
+    setFormatter(newFormatterType);
 
-    const newFormatter = newFormatKey === 'other' ?
-      customFormatter :
-      formatters?.[newFormatKey];
+    const newFormatter = getFormatterFunction(newFormatterType);
 
     setMuiFieldValue( newFormatter(muiFieldValue) );
     setHtmlFieldValue( newFormatter(htmlFieldValue) );
   };
 
-  const handleCustomFormatChange = (event) => {
+  const handleOtherFormatChange = (event) => {
     const newFormat = event.target.value;
     setOtherFormat(newFormat);
 
@@ -69,10 +85,11 @@ const App = () => {
     setHtmlFieldValue( customFormatter(htmlFieldValue, undefined, newFormat) );
   };
 
-  /* const handleCreditCardModeChange = (event) => {
-    const newMode = event.target.value;
-
-  }; */
+  const handleCreditCardModeChange = (event) => {
+    setCreditCardMode(event.target.value);
+    setMuiFieldValue('');
+    setHtmlFieldValue('');
+  };
 
   return (
     <>
@@ -82,13 +99,10 @@ const App = () => {
         <Container
           maxWidth="sm"
           component="main"
-          sx={{ padding: (theme) => theme.spacing(8, 0, 2) }}
+          sx={{ padding: (theme) => theme.spacing(8, 0, 1) }}
         >
           <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>
             Format As You Type.
-          </Typography>
-          <Typography variant="h6" align="center" color="textSecondary" component="p">
-            Pick a generic format or make your own by selecting 'Other'.
           </Typography>
         </Container>
         {/* Main Content */}
@@ -101,6 +115,11 @@ const App = () => {
           >
             <FormCard>
               <FormRow>
+                <FormLabel>
+                  1. Pick a format.
+                </FormLabel>
+              </FormRow>
+              <FormRow>
                 <Dropdown
                   id="format"
                   value={formatter}
@@ -109,7 +128,8 @@ const App = () => {
                   choices={formatterDropdownChoices}
                 />
               </FormRow>
-              {/* {formatter === 'creditCard' && (
+              {/* Credit card mode field */}
+              {formatter === 'creditCard' && (
                 <FormRow>
                   <Dropdown
                     id="credit-card-mode"
@@ -119,25 +139,31 @@ const App = () => {
                     choices={creditCardFormatModes}
                   />
                 </FormRow>
-              )} */}
+              )}
+              {/* Other format field */}
               {formatter === 'other' && (
                 <FormRow>
                   <TextField
                     value={otherFormat}
                     label="Custom Format"
-                    onChange={handleCustomFormatChange}
+                    onChange={handleOtherFormatChange}
                     onClear={() => setOtherFormat('')}
                   />
                 </FormRow>
               )}
+
               <FormRow>
                 <Divider sx={{ mt: 1 }} />
               </FormRow>
+
               {/* MUI input field */}
               <FormRow>
+                <FormLabel>
+                  2. Test it out.
+                </FormLabel>
                 <TextField
                   value={muiFieldValue}
-                  label="MUI Input"
+                  label="Custom Input Component"
                   onClear={() => setMuiFieldValue('')}
                   { ...formatMuiField }
                 />
@@ -154,7 +180,7 @@ const App = () => {
                     <StyledHTMLInputField
                       id="html-input-field"
                       value={htmlFieldValue}
-                      sx={{ mt: 1, mr: 1 }}
+                      sx={{ mt: 1 }}
                       { ...formatHtmlField }
                     />
                   </FormRow>
@@ -165,19 +191,7 @@ const App = () => {
         </Container>
 
         {/* Footer */}
-        <Footer maxWidth="md" component="footer">
-          <Box mt={2}>
-            <Typography variant="body2" color="textSecondary" align="center">
-              Copyright &copy;{' '}
-              <Link color="inherit" href={authorWebsite}>
-                Mark Kopani
-              </Link>
-              {' '}
-              {new Date().getFullYear()}
-              {'.'}
-            </Typography>
-          </Box>
-        </Footer>
+        <Footer />
       </ThemeProvider>
     </>
   );
@@ -190,7 +204,6 @@ export default App;
 const formatters = {
   date: formatDate,
   phone: formatPhone,
-  creditCard: formatCreditCard,
   postalCode: formatPostalCodeCanada,
   bigNumber: formatBigNumber,
 };
@@ -201,14 +214,14 @@ const formatterDropdownChoices = {
   creditCard: 'Credit Card | 0000 0000 0000 0000',
   postalCode: 'Postal Code | A0A 0A0',
   bigNumber: 'Big Number | 0,000,000',
-  other: 'Other',
+  other: 'Make Your Own Format',
 };
 
-/* const creditCardFormatModes = {
+const creditCardFormatModes = {
   NUMBER: 'Credit Card Number',
   EXPIRY_2: 'Expiry (MM / YY)',
   EXPIRY_4: 'Expiry (MM / YYYY)',
-}; */
+};
 
 const CustomTheme = createTheme({
   typography: {
@@ -235,16 +248,3 @@ const HTMLInputLabel = styled('label')({
   color: 'dimgrey',
   fontSize: '0.95rem',
 });
-
-const Footer = styled(Container)(({ theme }) => ({
-  borderTop: `1px solid ${theme.palette.divider}`,
-  marginTop: theme.spacing(8),
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    paddingTop: theme.spacing(6),
-    paddingBottom: theme.spacing(6),
-  },
-}));
