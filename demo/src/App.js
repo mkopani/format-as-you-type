@@ -75,6 +75,9 @@ const App = () => {
 
     setMuiFieldValue( newFormatter(muiFieldValue) );
     setHtmlFieldValue( newFormatter(htmlFieldValue) );
+
+    // Reset credit card mode
+    creditCardMode !== 'NUMBER' && setCreditCardMode('NUMBER');
   };
 
   const handleOtherFormatChange = (event) => {
