@@ -19,8 +19,11 @@ const TextField = (props) => {
       size={fieldSize}
       InputProps={{
         endAdornment: typeof onClear === 'function' && !!value.length ? (
-          <InputAdornment>
-            <ClearFieldButton onClick={onClear} disabled={value === ''} />
+          <InputAdornment position="end">
+            <ClearFieldButton
+              onClick={onClear}
+              size={fieldSize}
+            />
           </InputAdornment>
         ) : (
           <React.Fragment />

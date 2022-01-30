@@ -8,7 +8,8 @@ import FormCard from "./components/FormCard";
 import FormRow from "./components/FormRow";
 import Grid from "@mui/material/Grid";
 import TextField from "./components/TextField";
-import { fieldSize } from "./constants";
+import Typography from "@mui/material/Typography";
+import { authorWebsite, fieldSize } from "./constants";
 import useFieldFormatter, {
   formatString,
   formatDate,
@@ -17,6 +18,8 @@ import useFieldFormatter, {
   formatPostalCodeCanada,
   formatBigNumber,
 } from "format-as-you-type";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 
 const App = () => {
   const [muiFieldValue, setMuiFieldValue] = useState('');
@@ -24,6 +27,12 @@ const App = () => {
 
   const [formatter, setFormatter] = useState('date');
   const [otherFormat, setOtherFormat] = useState('');
+
+  /* const [creditCardMode, setCreditCardMode] = useState('NUMBER');
+
+  const creditCardFormatter = (newValue, options) => {
+    return formatters.creditCard(newValue, options, creditCardMode);
+  }; */
 
   const customFormatter = (newInput, options, format = otherFormat) => {
     return formatString(newInput, format, options);
@@ -60,22 +69,57 @@ const App = () => {
     setHtmlFieldValue( customFormatter(htmlFieldValue, undefined, newFormat) );
   };
 
+  /* const handleCreditCardModeChange = (event) => {
+    const newMode = event.target.value;
+
+  }; */
+
   return (
     <>
       <CssBaseline />
       <ThemeProvider theme={CustomTheme}>
-        <Container style={{ width: '100%' }}>
-          <Grid container spacing={2} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+        {/* Header */}
+        <Container
+          maxWidth="sm"
+          component="main"
+          sx={{ padding: (theme) => theme.spacing(8, 0, 2) }}
+        >
+          <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>
+            Format As You Type.
+          </Typography>
+          <Typography variant="h6" align="center" color="textSecondary" component="p">
+            Pick a generic format or make your own by selecting 'Other'.
+          </Typography>
+        </Container>
+        {/* Main Content */}
+        <Container maxWidth="md" component="main">
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            sx={{ mt: 1 }}
+          >
             <FormCard>
               <FormRow>
                 <Dropdown
-                  id="mui-format"
+                  id="format"
                   value={formatter}
                   label="Format"
                   onChange={handleFormatChange}
                   choices={formatterDropdownChoices}
                 />
               </FormRow>
+              {/* {formatter === 'creditCard' && (
+                <FormRow>
+                  <Dropdown
+                    id="credit-card-mode"
+                    value={creditCardMode}
+                    label="Credit Card Info Type"
+                    onChange={handleCreditCardModeChange}
+                    choices={creditCardFormatModes}
+                  />
+                </FormRow>
+              )} */}
               {formatter === 'other' && (
                 <FormRow>
                   <TextField
@@ -119,6 +163,21 @@ const App = () => {
             </FormCard>
           </Grid>
         </Container>
+
+        {/* Footer */}
+        <Footer maxWidth="md" component="footer">
+          <Box mt={2}>
+            <Typography variant="body2" color="textSecondary" align="center">
+              Copyright &copy;{' '}
+              <Link color="inherit" href={authorWebsite}>
+                Mark Kopani
+              </Link>
+              {' '}
+              {new Date().getFullYear()}
+              {'.'}
+            </Typography>
+          </Box>
+        </Footer>
       </ThemeProvider>
     </>
   );
@@ -145,6 +204,20 @@ const formatterDropdownChoices = {
   other: 'Other',
 };
 
+/* const creditCardFormatModes = {
+  NUMBER: 'Credit Card Number',
+  EXPIRY_2: 'Expiry (MM / YY)',
+  EXPIRY_4: 'Expiry (MM / YYYY)',
+}; */
+
+const CustomTheme = createTheme({
+  typography: {
+    fontFamily: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"Helvetica Neue"',
+      'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"',
+    ].join(','),
+  }
+});
+
 const StyledHTMLInputField = styled('input')({
   marginRight: 2,
   fontSize: '1rem',
@@ -163,10 +236,15 @@ const HTMLInputLabel = styled('label')({
   fontSize: '0.95rem',
 });
 
-const CustomTheme = createTheme({
-  typography: {
-    fontFamily: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"Helvetica Neue"',
-      'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"',
-    ].join(','),
-  }
-});
+const Footer = styled(Container)(({ theme }) => ({
+  borderTop: `1px solid ${theme.palette.divider}`,
+  marginTop: theme.spacing(8),
+  paddingTop: theme.spacing(3),
+  paddingBottom: theme.spacing(3),
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  [theme.breakpoints.up('sm')]: {
+    paddingTop: theme.spacing(6),
+    paddingBottom: theme.spacing(6),
+  },
+}));
