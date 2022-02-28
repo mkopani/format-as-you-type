@@ -15,8 +15,10 @@ Format fields the way you want using the input components you already use. Real-
 * The hook instance contains props to pass to your input component. Implement them by simply adding `{ ...yourConstantName }` at the end of the component's props.
 <!-- * [See for yourself!]() -->
 
-![demo-gif](demo/demo.gif)
-
+<p align="center">
+  <img src="demo/demo.gif" width="400" alt="demo-gif" />
+</p>
+ 
 Want to see more examples? Keep reading!
 
 † As you will see further below, there are some custom input components that won't behave as expected when using `ref={}`.
@@ -45,8 +47,17 @@ import { formatString } from 'format-as-you-type';
 const formatCustom = (newInput, options, /* any additional parameters */) => {
   // Any extra logic goes here...
 
-  return formatString(newInput, '0000 / 0000 \ 0000', options);
+  return formatString(newInput, '0000 \ 0000', options);
 };
+```
+
+That same example can be implemented into the `useFieldFormatter` hook in a component like so:
+
+```
+const customFieldFormatter = useFieldFormatter(
+  (newValue, options) => formatString(newInput, '0000 \ 0000', { ...options }),
+  setCustomField,
+);
 ```
 
 Custom formats can either contain placeholder characters such as `A` for letters and `0` for numbers (e.g. `(000) 000-0000`), or actual letters and numbers (e.g. `(604) 123-4567`). All that matters is where separators (non-numbers and non-letters) are placed.
@@ -202,4 +213,5 @@ This function simply formats strings to match the `A0A 0A0` format.
 | lettersAsSeparators | Treat letters as a separator. I.e. don't format them. | boolean (`false`) |
 | numbersOnly | Doesn't allow letters in input. | boolean (`false`) |
 | lettersOnly | Doesn't allow numbers in input. | boolean (`false`) |
+| allCaps | Forces letters to be capitalized. | boolean (`false`) |
 | customFormatter | Skip `formatString()` and use a custom formatter, such as JavaScript's built-in `number.toLocaleString()`, which is used in `formatBigNumber()`. | function that returns a string |

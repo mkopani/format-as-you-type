@@ -89,10 +89,6 @@ const checkParameters = (options) => {
     throw new Error('One of numbersOnly or lettersOnly must be false.');
   }
 
-  if (options.numbersOnly && options.allCaps) {
-    console.log("Heads up: allCaps doesn't do anything if numbersOnly is true.");
-  }
-
   if (options.lettersOnly && options.lettersAsSeparators) {
     throw new Error("lettersOnly and lettersAsSeparators can't both be true.");
   }
@@ -108,12 +104,6 @@ const checkParameters = (options) => {
 const checkFormat = (formatLength, numSeparators) => {
   let hasErrors = false;
   
-  // Return raw string if no separators included
-  if ( !numSeparators ) {
-    console.error("It doesn't look like you've included any separators in the format argument.");
-    hasErrors = true;
-  }
-
   // Print error if format is non-empty
   if (formatLength < 1) {
     console.error('String format must be at least one character long.');
@@ -121,7 +111,7 @@ const checkFormat = (formatLength, numSeparators) => {
   }
 
   // Print error if entire format string is composed of errors
-  if (numSeparators === formatLength) {
+  if (numSeparators === formatLength && numSeparators > 0) {
     console.error('Formatted string cannot consist of only separators.');
     hasErrors = true;
   }
