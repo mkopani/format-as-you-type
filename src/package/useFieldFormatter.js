@@ -30,9 +30,9 @@ const useFieldFormatter = (formatter, onChange, refProp = 'ref') => {
     const selectionEnd = target.selectionEnd;
     const inputType = event.nativeEvent.inputType;
     const isMidText = selectionEnd < thisValue.length - 1;
-    
+
     let backspaceType = '';
-    if ( inputType.includes('deleteContent') ) {
+    if ( !!inputType && inputType.includes('deleteContent') ) {
       backspaceType += inputType.includes('Backward') ? 'backspace' : 'delete';
     }
 
