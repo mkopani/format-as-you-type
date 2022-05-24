@@ -13,11 +13,11 @@
     "jsx": "preserve",
     "incremental": true,
     "target": "ESNext",
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["src/package/*"]
+      "@/*": ["./package/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.js"],
   "exclude": ["node_modules"]
 }

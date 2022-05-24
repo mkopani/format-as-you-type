@@ -3,31 +3,42 @@ import isSeparator from "./_lib/isSeparator";
 import removeSeparators from "./filters/removeSeparators";
 import removeLetters from "./filters/removeLetters";
 import removeNumbers from "./filters/removeNumbers";
-import setDefaultOption from "./_lib/setDefaultOption";
 
-const formatString = (newInput, format = '', options = {}) => {
-  setDefaultOption(options, 'lettersAsSeparators', false);
-  setDefaultOption(options, 'numbersOnly', false);
-  setDefaultOption(options, 'lettersOnly', false);
-  setDefaultOption(options, 'allCaps', false);
+export type FormatStringOptions = {
+  lettersAsSeparators?: boolean;
+  numbersOnly?: boolean;
+  lettersOnly?: boolean;
+  allCaps?: boolean;
+  backspaceAt?: number;
+  deleteAt?: number;
+  customFormatter?: Formatter;
+};
 
-  // Check for conflicting parameters
-  checkParameters(options);
+export type Formatter = (
+  input: string,
+  options?: FormatStringOptions
+) => string;
 
-  const {
-    lettersAsSeparators,
+const formatString = (
+  newInput: string,
+  format: string = "",
+  {
+    lettersAsSeparators = false,
+    numbersOnly = false,
+    lettersOnly = false,
+    allCaps = false,
     backspaceAt,
     deleteAt,
     customFormatter,
-    numbersOnly,
-    lettersOnly,
-    allCaps,
-  } = options;
+  }: FormatStringOptions = {}
+) => {
+  // Check for conflicting parameters
+  checkParameters({ numbersOnly, lettersOnly, lettersAsSeparators });
 
   // Handle backspace/delete if necessary
-  if (typeof backspaceAt === 'number') {
+  if (typeof backspaceAt === "number") {
     newInput = handleBackspace(newInput, backspaceAt);
-  } else if (typeof deleteAt === 'number') {
+  } else if (typeof deleteAt === "number") {
     newInput = handleBackspace(newInput, deleteAt, true);
   }
 
@@ -37,10 +48,10 @@ const formatString = (newInput, format = '', options = {}) => {
 
   // Clean up input and re-start process
   let rawValue = removeSeparators(newInput, lettersAsSeparators);
-  if (rawValue.length === 0) return '';
+  if (rawValue.length === 0) return "";
 
   // Use custom formatter callback if provided
-  if (typeof customFormatter === 'function') return customFormatter(rawValue);
+  if (typeof customFormatter === "function") return customFormatter(rawValue);
 
   // Clean up format and initialize separator map
   const formatCleaned = format.trim();
@@ -59,19 +70,19 @@ const formatString = (newInput, format = '', options = {}) => {
   }
 
   // Convert rawValue into an array
-  const inputArray = rawValue.split('');
+  const inputArray = rawValue.split("");
 
   for (const [idxString, separator] of Object.entries(separatorMap)) {
     const index = parseInt(idxString);
-    
+
     // Break loop if index exceeds input length
     if (index > inputArray.length) break;
 
     // Insert separator at index
-    inputArray.splice(index, 0, separator);
+    inputArray.splice(index, 0, separator as string);
   }
 
-  return inputArray.join('');
+  return inputArray.join("");
 };
 
 export default formatString;
@@ -82,14 +93,21 @@ export default formatString;
 /**
  * Check for any conflicting option parameters.
  * 
- * @param {object} options - The options object for formatString
+ * @param {FormatStringOptions} options - The options object for formatString
  */
-const checkParameters = (options) => {
-  if (options.numbersOnly && options.lettersOnly) {
-    throw new Error('One of numbersOnly or lettersOnly must be false.');
+const checkParameters = ({
+  numbersOnly,
+  lettersOnly,
+  lettersAsSeparators,
+}: Pick<
+  FormatStringOptions,
+  "numbersOnly" | "lettersOnly" | "lettersAsSeparators"
+>) => {
+  if (numbersOnly && lettersOnly) {
+    throw new Error("One of numbersOnly or lettersOnly must be false.");
   }
 
-  if (options.lettersOnly && options.lettersAsSeparators) {
+  if (lettersOnly && lettersAsSeparators) {
     throw new Error("lettersOnly and lettersAsSeparators can't both be true.");
   }
 };
@@ -101,22 +119,26 @@ const checkParameters = (options) => {
  * @param {number} numSeparators - The number of separators in the format string
  * @returns {boolean}
  */
-const checkFormat = (formatLength, numSeparators) => {
+const checkFormat = (formatLength: number, numSeparators: number): boolean => {
   let hasErrors = false;
-  
+
   // Print error if format is non-empty
   if (formatLength < 1) {
-    console.error('String format must be at least one character long.');
+    console.error("String format must be at least one character long.");
     hasErrors = true;
   }
 
   // Print error if entire format string is composed of errors
   if (numSeparators === formatLength && numSeparators > 0) {
-    console.error('Formatted string cannot consist of only separators.');
+    console.error("Formatted string cannot consist of only separators.");
     hasErrors = true;
   }
 
   return hasErrors;
+};
+
+type SeparatorsMap = {
+  [key: string]: string;
 };
 
 /**
@@ -126,12 +148,15 @@ const checkFormat = (formatLength, numSeparators) => {
  * @param {boolean} lettersAsSeparators - Whether letters are to be considered as separators
  * @returns {object}
  */
-const buildSeparatorsMap = (format, lettersAsSeparators = false) => {
-  const separatorMap = {};
-  
+const buildSeparatorsMap = (
+  format: string,
+  lettersAsSeparators: boolean = false
+): SeparatorsMap => {
+  const separatorMap: SeparatorsMap = {};
+
   for (let i = 0; i < format.length; i++) {
     const char = format[i];
-    if ( !isSeparator(char, lettersAsSeparators) ) continue;
+    if (!isSeparator(char, lettersAsSeparators)) continue;
 
     separatorMap[i] = char;
   }
