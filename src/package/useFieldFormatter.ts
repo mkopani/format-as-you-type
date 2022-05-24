@@ -40,7 +40,6 @@ const useFieldFormatter = (
     let selectionStart = target.selectionStart;
     selectionStart = selectionStart === null ? 0 : selectionStart;
     const selectionEnd = target.selectionEnd;
-    // @ts-ignore
     const inputType = event.nativeEvent.inputType;
     const isMidText = selectionEnd !== null && selectionEnd < thisValue.length - 1;
 

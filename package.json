@@ -13,8 +13,9 @@
   "version": "1.0.8",
   "license": "MIT",
   "private": false,
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.ts",
+  "module": "dist/index.ts",
+  "types": "index.d.ts",
   "files": [
     "dist",
     "README.md",

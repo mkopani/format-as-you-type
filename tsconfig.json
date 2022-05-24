@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "./built",
+    "outDir": "dist",
+    "declaration": true,
     "allowJs": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,

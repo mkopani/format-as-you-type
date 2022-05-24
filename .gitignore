@@ -28,5 +28,5 @@ yarn-error.log*
 
 */test.js
 demo/node_modules/
-tsconfig.tsbuildinfo
+*/tsconfig.tsbuildinfo
 out/
