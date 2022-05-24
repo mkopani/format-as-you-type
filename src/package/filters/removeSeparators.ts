@@ -7,9 +7,14 @@ import removeCharacters from "../_lib/removeCharacters";
  * @param {string} string - The string in question
  * @returns {string}
  */
-const removeSeparators = (string, lettersAsSeparators = false) => (
-  removeCharacters(string, (x) => isNumber(x) || (!lettersAsSeparators && isLetter(x)))
-);
+const removeSeparators = (
+  string: string,
+  lettersAsSeparators = false
+): string =>
+  removeCharacters(
+    string,
+    (x) => isNumber(x) || (!lettersAsSeparators && isLetter(x))
+  );
 
- export default removeSeparators;
+export default removeSeparators;
  
