@@ -1,6 +1,6 @@
 import isSeparator from "./isSeparator";
 
-const findIndexAfterMovement = (input, startingIndex, forward = false) => {
+const findIndexAfterMovement = (input: string, startingIndex: number, forward: boolean = false) => {
   let offset = 0, pos = startingIndex;
 
   while (true) {

@@ -12,7 +12,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "target": "es5",
+    "target": "ESNext",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/package/*"]

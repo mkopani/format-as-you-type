@@ -1,4 +1,8 @@
-const setDefaultOption = (options, key, defaultValue) => {
+const setDefaultOption = (
+  options: { [key: string]: any },
+  key: string,
+  defaultValue: any
+) => {
   if (options?.[key] !== undefined) return;
 
   options[key] = defaultValue;
