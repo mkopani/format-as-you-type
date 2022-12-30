@@ -1,3 +1,11 @@
+<p align="center">
+  <img
+    src="graphic.png"
+    width="100%"
+    alt="Graphic for Format As You Type project"
+  />
+</p>
+
 # Format As You Type
 
 #### The simplest field formatting and masking tool for React.
